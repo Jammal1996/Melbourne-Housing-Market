@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Melbourne House Price Predictor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 460px;
+            background: white;
+            border-radius: 18px;
+            padding: 32px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102,126,234,0.15);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.95;
+        }
+
+        .result {
+            margin-top: 26px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e6fffa, #f0fff4);
+            border-radius: 14px;
+            text-align: center;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .price {
+            font-size: 26px;
+            font-weight: 700;
+            margin-top: 6px;
+        }
+
+        .currency {
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 14px;
+            background: #fff1f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>🏠 House Price Predictor</h1>
+    <div class="subtitle">Melbourne properties · Machine Learning estimate</div>
+
+    <form method="POST">
+        <div class="field">
+            <select name="suburb" required>
+                <option value="">Select Suburb</option>
+                {% for suburb in suburbs %}
+                    <option value="{{ suburb }}">{{ suburb }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="field">
+            <input type="number" name="rooms" placeholder="Number of Rooms" required>
+        </div>
+
+        <div class="field">
+            <input type="number" step="any" name="distance" placeholder="Distance to CBD (km)" required>
+        </div>
+
+        <div class="field">
+            <input type="number" step="any" name="landsize" placeholder="Land Size (sqm)" required>
+        </div>
+
+        <div class="field">
+            <input type="number" step="any" name="building_area" placeholder="Building Area (sqm)" required>
+        </div>
+
+        <div class="field">
+            <input type="number" name="year_built" placeholder="Year Built" required>
+        </div>
+
+        <button type="submit">Predict Price</button>
+    </form>
+
+    {% if prediction is not none %}
+        <div class="result">
+            💰 Estimated Property Price
+            <div class="price">
+                A${{ "{:,.0f}".format(prediction) }}
+            </div>
+            <div class="currency">
+                Australian Dollars (AUD)
+            </div>
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="error">
+            ⚠️ {{ error }}
+        </div>
+    {% endif %}
+
+    <div class="footer">
+        Powered by Machine Learning · Melbourne Housing Data
+    </div>
+</div>
+
+</body>
+</html>
